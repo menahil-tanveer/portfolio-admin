@@ -68,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         validate: {
           len: [2, 100],
-          is: /^[a-zA-Z0-9 ]+$/i,
+          is: /^[a-zA-Z0-9'!.()&*%"-_ ]+$/i,
           notEmpty: true,
         },
       },

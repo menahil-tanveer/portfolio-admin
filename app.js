@@ -1,7 +1,7 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const cors = require("cors");
-
+const userRoutes = require("./routes/user");
 
 const app = express();
 const port = 8080;
@@ -16,7 +16,7 @@ const corsOpts = {
   methods: ["GET", "POST", "PUT", "DELETE"],
   // allowedHeaders: ["Content-Type"],
 };
-
+app.use("/api/users", userRoutes);
 app.use(cors(corsOpts));
 app.get("/", (req, res) => {
   res.status(200).json("Home route *_* ");

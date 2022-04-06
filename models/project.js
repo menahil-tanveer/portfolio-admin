@@ -9,10 +9,22 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Project.belongsToMany(models.User, {
+        through: "Development",
+        foreignKey: "project_id",
+      });
     }
   }
   Project.init(
     {
+      project_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        unique: true,
+        validate: {
+          notEmpty: true,
+        },
+      },
       project_name: {
         type: DataTypes.STRING,
         len: [2, 100],
