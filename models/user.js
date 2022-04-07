@@ -13,8 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Project, {
         foreignKey: "user_id",
       });
-      User.belongsToMany(models.SocialAccount, {
-        through: "UserSocials",
+      User.hasMany(models.SocialAccount, {
         foreignKey: "user_id",
       });
       User.belongsToMany(models.Testimonial, {

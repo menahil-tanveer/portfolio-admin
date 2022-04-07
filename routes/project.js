@@ -2,7 +2,7 @@
  *
  * Author: Menahil
  * Created: 07-04-2022
- * Purpose: This file contains all the routes for users
+ * Purpose: This file contains all the routes for projects
  *
  */
 const express = require("express");

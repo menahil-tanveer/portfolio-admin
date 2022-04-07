@@ -8,15 +8,18 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      SocialAccount.belongsToMany(models.User, {
-        through: "UserSocials",
-        foreignKey: "social_id",
+      SocialAccount.belongsTo(models.User, {
+        foreignKey: "user_id",
       });
     }
   }
   SocialAccount.init(
     {
-      social_id: DataTypes.INTEGER,
+      social_id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       name: {
         type: DataTypes.STRING,
         len: [2, 100],

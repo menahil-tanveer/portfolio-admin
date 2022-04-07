@@ -5,6 +5,7 @@
  * Purpose: This file contains all the controllers for projects
  *
  */
+
 const userModel = require("../models").User;
 const projectModel = require("../models").Project;
 const socialAccountModel = require("../models").SocialAccount;
@@ -16,10 +17,10 @@ const educationModel = require("../models").Education;
  *
  * @param req
  * @param res
- * @description This method is responsible for adding project in user portfolio
+ * @description This method is responsible for adding socials in user portfolio
  */
-const addNewProject = async (req, res) => {
-  let { user_id, project_name, git_url, project_url } = req.body;
+const addNewSocial = async (req, res) => {
+  let { user_id, name, social_url } = req.body;
   try {
     let user = await userModel.findByPk(user_id);
     if (!user)
@@ -27,14 +28,13 @@ const addNewProject = async (req, res) => {
         message: "User not found!",
       });
     else {
-      await projectModel.create({
+      await socialAccountModel.create({
         user_id,
-        project_name,
-        git_url,
-        project_url,
+        name,
+        social_url,
       });
       res.status(200).send({
-        message: "Project successfully added!",
+        message: "New social account added!",
       });
     }
   } catch (error) {
@@ -46,12 +46,12 @@ const addNewProject = async (req, res) => {
  *
  * @param {*} req
  * @param {*} res
- * @description This method is responsible for fetching all the projects in user's portfolio
+ * @description This method is responsible for fetching all the socials in user's portfolio
  */
-const getAllProjects = async (req, res) => {
+const getAllSocials = async (req, res) => {
   try {
-    const projects = await projectModel.findAll();
-    res.status(200).send({ projects });
+    const socials = await socialAccountModel.findAll();
+    res.status(200).send({ socials });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -61,19 +61,19 @@ const getAllProjects = async (req, res) => {
  * @param {*} req
  * @param {*} res
  */
-const getProjectById = async (req, res) => {
+const getSocialById = async (req, res) => {
   try {
-    const project = await projectModel.findOne({
+    const socialAccount = await socialAccountModel.findOne({
       where: {
-        project_id: req.params.project_id,
+        social_id: req.params.social_id,
       },
     });
-    if (!project)
+    if (!socialAccount)
       res.status(404).send({
-        message: "Project not found!",
+        message: "Social account not found!",
       });
     else {
-      res.status(200).send(project);
+      res.status(200).send({ social: socialAccount });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -84,25 +84,25 @@ const getProjectById = async (req, res) => {
  *
  * @param req
  * @param res
- * @description This method is responsible for updating project details
+ * @description This method is responsible for updating social account details
  */
-const updateProject = async (req, res) => {
+const updateSocial = async (req, res) => {
   try {
-    const project = await projectModel.findOne({
+    const socialAccount = await socialAccountModel.findOne({
       where: {
-        project_id: req.params.project_id,
+        social_id: req.params.social_id,
       },
     });
-    if (!project)
+    if (!socialAccount)
       res.status(404).send({
-        message: "Project not found",
+        message: "Social account not found",
       });
     else {
-      const updatedProject = await project.update(req.body);
-      await project.save();
+      const updatedSocialAccount = await socialAccount.update(req.body);
+      await socialAccount.save();
       res.status(200).send({
-        message: "Project successfully updated!",
-        project: updatedProject,
+        message: "Social account successfully updated!",
+        project: updatedSocialAccount,
       });
     }
   } catch (error) {
@@ -122,25 +122,25 @@ const updateProject = async (req, res) => {
  * @param res
  * @description This method is responsible for removing project from user's portfolio
  */
-const deleteProject = async (req, res) => {
+const deleteSocial = async (req, res) => {
   try {
-    const project = await projectModel.findOne({
+    const socialAccount = await socialAccountModel.findOne({
       where: {
-        project_id: req.params.project_id,
+        social_id: req.params.social_id,
       },
     });
-    if (!project)
+    if (!socialAccount)
       res.status(404).send({
-        message: "Project not found",
+        message: "Social account not found",
       });
     else {
-      await user.destroy({
+      await socialAccount.destroy({
         where: {
-          project_id: req.params.project_id,
+          social_id: req.params.social_id,
         },
       });
       res.status(200).send({
-        message: "Project successfully deleted!",
+        message: "Social account successfully deleted!",
       });
     }
   } catch (error) {
@@ -149,9 +149,9 @@ const deleteProject = async (req, res) => {
 };
 
 module.exports = {
-  addNewProject,
-  getAllProjects,
-  getProjectById,
-  updateProject,
-  deleteProject,
+  addNewSocial,
+  getAllSocials,
+  getSocialById,
+  updateSocial,
+  deleteSocial,
 };

@@ -2,18 +2,18 @@
  *
  * Author: Menahil
  * Created: 07-04-2022
- * Purpose: This file contains all the routes for users
+ * Purpose: This file contains all the routes for socials
  *
  */
  const express = require("express");
  const router = express.Router();
- const socialAccountController = require("../controllers/socialAccount");
+ const socialController = require("../controllers/social");
  
- router.post("/add-new-social", projectController.addNewProject);
- router.get("/get-all-socials", projectController.getAllProjects);
- router.get("/get-social/:social_id", projectController.getProjectById);
- router.patch("/update-social/:social_id", projectController.updateProject);
- router.delete("/delete-social/:social_id", projectController.deleteProject);
+ router.post("/add-new-social", socialController.addNewSocial);
+ router.get("/get-all-socials", socialController.getAllSocials);
+ router.get("/get-social/:social_id", socialController.getSocialById);
+ router.patch("/update-social/:social_id", socialController.updateSocial);
+ router.delete("/delete-social/:social_id", socialController.deleteSocial);
  
  module.exports = router;
  
