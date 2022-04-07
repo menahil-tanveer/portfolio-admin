@@ -4,6 +4,7 @@ const cors = require("cors");
 const userRoutes = require("./routes/user");
 const projectRoutes = require("./routes/project");
 const socialRoutes = require("./routes/socials");
+const educationRoutes = require("./routes/education");
 
 const app = express();
 const port = 8080;
@@ -21,7 +22,7 @@ const corsOpts = {
 app.use("/api/users", userRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/socials", socialRoutes);
-
+app.use("/api/education", educationRoutes);
 
 app.use(cors(corsOpts));
 app.get("/", (req, res) => {

@@ -8,15 +8,20 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Education.belongsToMany(models.User, {
-        through: "UserEducation",
-        foreignKey: "edu_id",
+      Education.belongsTo(models.User, {
+        foreignKey: "user_id",
       });
     }
   }
   Education.init(
     {
-      edu_id: DataTypes.INTEGER,
+      edu_id: {
+        type: DataTypes.INTEGER,
+        unique: true,
+        validate: {
+          notEmpty: true,
+        },
+      },
       degree: {
         type: DataTypes.STRING,
         len: [2, 100],

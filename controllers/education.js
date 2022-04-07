@@ -2,7 +2,7 @@
  *
  * Author: Menahil
  * Created: 07-04-2022
- * Purpose: This file contains all the controllers for projects
+ * Purpose: This file contains all the controllers for education
  *
  */
 const userModel = require("../models").User;
@@ -16,10 +16,10 @@ const educationModel = require("../models").Education;
  *
  * @param req
  * @param res
- * @description This method is responsible for adding project in user portfolio
+ * @description This method is responsible for adding an educational degree in user's portfolio
  */
-const addNewProject = async (req, res) => {
-  let { user_id, project_name, git_url, project_url } = req.body;
+const addEducation = async (req, res) => {
+  let { user_id, degree, institution } = req.body;
   try {
     let user = await userModel.findByPk(user_id);
     if (!user)
@@ -27,14 +27,13 @@ const addNewProject = async (req, res) => {
         message: "User not found!",
       });
     else {
-      await projectModel.create({
+      await educationModel.create({
         user_id,
-        project_name,
-        git_url,
-        project_url,
+        degree,
+        institution,
       });
       res.status(200).send({
-        message: "Project successfully added!",
+        message: "Education added!",
       });
     }
   } catch (error) {
@@ -46,45 +45,22 @@ const addNewProject = async (req, res) => {
  *
  * @param {*} req
  * @param {*} res
- * @description This method is responsible for fetching all the projects in user's portfolio
+ * @description This method is responsible for fetching complete educational background of the user
  */
-const getAllProjects = async (req, res) => {
+const getEducationalBackground = async (req, res) => {
   try {
     const user = await userModel.findOne({
       where: {
         user_id: req.body.user_id,
       },
-      include: [projectModel],
+      include: [educationModel],
     });
     if (!user)
       res.status(404).send({
-        message: "User not found",
+        message: "User not found!",
       });
     else {
-      res.status(200).send({ projects: user.Projects });
-    }
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-/**
- *
- * @param {*} req
- * @param {*} res
- */
-const getProjectById = async (req, res) => {
-  try {
-    const project = await projectModel.findOne({
-      where: {
-        project_id: req.params.project_id,
-      },
-    });
-    if (!project)
-      res.status(404).send({
-        message: "Project not found!",
-      });
-    else {
-      res.status(200).send(project);
+      res.status(200).send({ educational_background: user.Education });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -95,25 +71,24 @@ const getProjectById = async (req, res) => {
  *
  * @param req
  * @param res
- * @description This method is responsible for updating project details
+ * @description This method is responsible for updating educational details
  */
-const updateProject = async (req, res) => {
+const updateEducationalBackground = async (req, res) => {
   try {
-    const project = await projectModel.findOne({
+    const education = await educationModel.findOne({
       where: {
-        project_id: req.params.project_id,
+        id: req.params.id,
       },
     });
-    if (!project)
+    if (!education)
       res.status(404).send({
-        message: "Project not found",
+        message: "Not found",
       });
     else {
-      const updatedProject = await project.update(req.body);
-      await project.save();
+      await education.update(req.body);
+      await education.save();
       res.status(200).send({
-        message: "Project successfully updated!",
-        project: updatedProject,
+        message: "Educational background updated!",
       });
     }
   } catch (error) {
@@ -131,27 +106,27 @@ const updateProject = async (req, res) => {
  *
  * @param req
  * @param res
- * @description This method is responsible for removing project from user's portfolio
+ * @description This method is responsible for removing an educational degree from user's portfolio
  */
-const deleteProject = async (req, res) => {
+const deleteEducation = async (req, res) => {
   try {
-    const project = await projectModel.findOne({
+    const education = await educationModel.findOne({
       where: {
-        project_id: req.params.project_id,
+        id: req.params.id,
       },
     });
-    if (!project)
+    if (!education)
       res.status(404).send({
-        message: "Project not found",
+        message: "Degree not found",
       });
     else {
-      await user.destroy({
+      await education.destroy({
         where: {
-          project_id: req.params.project_id,
+          id: req.params.id,
         },
       });
       res.status(200).send({
-        message: "Project successfully deleted!",
+        message: "Degree successfully deleted!",
       });
     }
   } catch (error) {
@@ -160,9 +135,8 @@ const deleteProject = async (req, res) => {
 };
 
 module.exports = {
-  addNewProject,
-  getAllProjects,
-  getProjectById,
-  updateProject,
-  deleteProject,
+  addEducation,
+  getEducationalBackground,
+  updateEducationalBackground,
+  deleteEducation,
 };

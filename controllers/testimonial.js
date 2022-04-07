@@ -2,24 +2,23 @@
  *
  * Author: Menahil
  * Created: 07-04-2022
- * Purpose: This file contains all the controllers for projects
+ * Purpose: This file contains all the controllers for testimonials
  *
  */
 const userModel = require("../models").User;
 const projectModel = require("../models").Project;
-const socialAccountModel = require("../models").SocialAccount;
+
 const testimonialModel = require("../models").Testimonial;
-const educationModel = require("../models").Education;
 
 // ---------------------------------------------- CREATE ----------------------------------------------------
 /**
  *
  * @param req
  * @param res
- * @description This method is responsible for adding project in user portfolio
+ * @description This method is responsible for adding testimonials in user portfolio
  */
-const addNewProject = async (req, res) => {
-  let { user_id, project_name, git_url, project_url } = req.body;
+const addNewTestimonial = async (req, res) => {
+  let { user_id, client_name, testimonial } = req.body;
   try {
     let user = await userModel.findByPk(user_id);
     if (!user)
@@ -27,14 +26,13 @@ const addNewProject = async (req, res) => {
         message: "User not found!",
       });
     else {
-      await projectModel.create({
+      await testimonialModel.create({
         user_id,
-        project_name,
-        git_url,
-        project_url,
+        client_name,
+        testimonial,
       });
       res.status(200).send({
-        message: "Project successfully added!",
+        message: "Testimonial successfully added!",
       });
     }
   } catch (error) {
@@ -50,19 +48,8 @@ const addNewProject = async (req, res) => {
  */
 const getAllProjects = async (req, res) => {
   try {
-    const user = await userModel.findOne({
-      where: {
-        user_id: req.body.user_id,
-      },
-      include: [projectModel],
-    });
-    if (!user)
-      res.status(404).send({
-        message: "User not found",
-      });
-    else {
-      res.status(200).send({ projects: user.Projects });
-    }
+    const projects = await projectModel.findAll();
+    res.status(200).send({ projects });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -160,9 +147,9 @@ const deleteProject = async (req, res) => {
 };
 
 module.exports = {
-  addNewProject,
-  getAllProjects,
-  getProjectById,
-  updateProject,
-  deleteProject,
+  addNewTestimonial,
+//   getAllProjects,
+//   getProjectById,
+//   updateProject,
+//   deleteProject,
 };

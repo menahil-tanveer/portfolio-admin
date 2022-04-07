@@ -16,12 +16,11 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.SocialAccount, {
         foreignKey: "user_id",
       });
-      User.belongsToMany(models.Testimonial, {
-        through: "UserTestimonials",
-        foreignKey: "user_id",
-      });
-      User.belongsToMany(models.Education, {
-        through: "UserEducation",
+      // User.belongsToMany(models.Testimonial, {
+      //   through: "UserTestimonials",
+      //   foreignKey: "user_id",
+      // });
+      User.hasMany(models.Education, {
         foreignKey: "user_id",
       });
     }
