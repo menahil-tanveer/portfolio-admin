@@ -3,6 +3,9 @@
 
 const userModel = require("../models").User;
 const projectModel = require("../models").Project;
+const socialAccountModel = require("../models").SocialAccount;
+const testimonialModel = require("../models").Testimonial;
+const educationModel = require("../models").Education;
 
 // ---------------------------------------------- CREATE METHODS----------------------------------------------------
 /**
@@ -46,14 +49,44 @@ const getUserById = async (req, res) => {
       where: {
         user_id: req.params.user_id,
       },
-      //   include: projectModel,
+      include: [
+        projectModel,
+        socialAccountModel,
+        testimonialModel,
+        educationModel,
+      ],
     });
     if (!user)
       res.status(404).send({
         message: "User not found",
       });
     else {
-      res.status(200).send(user);
+      const {
+        user_id,
+        name,
+        email,
+        password,
+        about,
+        portfolio_url,
+        image,
+        Projects,
+        SocialAccounts,
+        Testimonials,
+        Education,
+      } = user;
+      res.status(200).send({
+        user_id,
+        name,
+        email,
+        password,
+        about,
+        portfolio_url,
+        image,
+        Projects,
+        SocialAccounts,
+        Testimonials,
+        Education,
+      });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });

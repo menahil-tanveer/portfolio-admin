@@ -8,11 +8,15 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Testimonial.belongsToMany(models.User, {
+        through: "UserTestimonials",
+        foreignKey: "test_id",
+      });
     }
   }
   Testimonial.init(
     {
+      test_id: DataTypes.INTEGER,
       testimonial: {
         type: DataTypes.STRING,
         len: [2, 150],
