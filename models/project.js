@@ -9,9 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Project.belongsToMany(models.User, {
-        through: "UserProjects",
-        foreignKey: "project_id",
+      Project.belongsTo(models.User, {
+        foreignKey: "user_id",
       });
     }
   }
@@ -24,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           notEmpty: true,
         },
+        autoIncrement: true,
       },
       project_name: {
         type: DataTypes.STRING,
