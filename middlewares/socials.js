@@ -12,25 +12,22 @@ const Joi = require("joi");
  * @param next
  * @description This method is responsible for validating user input at the time education resource creation
  */
-function validateEducation(req, res, next) {
-  let { user_id, degree, institution } = req.body;
+function validateSocial(req, res, next) {
+  let { user_id, name, url } = req.body;
   let payload = {
     user_id: user_id ? user_id.toLowerCase().trim() : null,
-    degree: degree ? degree.toLowerCase().trim() : null,
-    institution: institution ? institution.trim() : null,
+    name: name ? name.toLowerCase().trim() : null,
+    url: url ? url.trim() : null,
   };
   try {
     const schema = Joi.object().keys({
       user_id: Joi.string().required(),
-      degree: Joi.string()
+      name: Joi.string()
         .regex(/^[A-Za-z ]+$/)
         .min(2)
         .max(100)
         .required(),
-      institution: Joi.string()
-        .regex(/^[A-Za-z ]+$/)
-        .min(2)
-        .max(100),
+      url: Joi.string().min(2).max(100),
     });
     const result = schema.validate(payload);
     if (result.error) {
@@ -51,17 +48,14 @@ function validateEducation(req, res, next) {
  * @param next
  * @description This method is responsible for validating updated data
  */
-function validateEducationUpdate(req, res, next) {
+function validateSocialUpdate(req, res, next) {
   try {
     const schema = Joi.object().keys({
-      degree: Joi.string()
+      name: Joi.string()
         .regex(/^[A-Za-z ]+$/)
         .min(2)
         .max(100),
-      institution: Joi.string()
-        .regex(/^[A-Za-z ]+$/)
-        .min(2)
-        .max(100),
+      url: Joi.string().min(2).max(100),
     });
     const result = schema.validate(req.body);
     if (result.error) {
@@ -77,6 +71,6 @@ function validateEducationUpdate(req, res, next) {
   }
 }
 module.exports = {
-  validateEducation,
-  validateEducationUpdate,
+  validateSocial,
+  validateSocialUpdate,
 };
