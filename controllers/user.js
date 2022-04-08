@@ -52,7 +52,7 @@ const getUserById = async (req, res) => {
       include: [
         projectModel,
         socialAccountModel,
-        // testimonialModel,
+        testimonialModel,
         educationModel,
       ],
     });

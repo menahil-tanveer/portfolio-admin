@@ -10,9 +10,18 @@ const router = express.Router();
 const testimonialController = require("../controllers/testimonial");
 
 router.post("/add-new-testimonial", testimonialController.addNewTestimonial);
-//  router.get("/get-all-projects", testimonialController.getAllProjects);
-//  router.get("/get-project/:project_id", testimonialController.getProjectById);
-//  router.patch("/update-project/:project_id", testimonialController.updateProject);
-//  router.delete("/delete-project/:project_id", testimonialController.deleteProject);
+router.post("/get-all-testimonials", testimonialController.getAllTestimonials);
+router.get(
+  "/get-testimonial/:test_id",
+  testimonialController.getTestimonialById
+);
+router.patch(
+  "/update-testimonial/:test_id",
+  testimonialController.updateTestimonial
+);
+router.delete(
+  "/delete-testimonial/:test_id",
+  testimonialController.deleteTestimonial
+);
 
 module.exports = router;

@@ -20,7 +20,7 @@ const educationModel = require("../models").Education;
  * @description This method is responsible for adding socials in user portfolio
  */
 const addNewSocial = async (req, res) => {
-  let { user_id, name, social_url } = req.body;
+  let { user_id, name, url } = req.body;
   try {
     let user = await userModel.findByPk(user_id);
     if (!user)
@@ -31,7 +31,7 @@ const addNewSocial = async (req, res) => {
       await socialAccountModel.create({
         user_id,
         name,
-        social_url,
+        url,
       });
       res.status(200).send({
         message: "New social account added!",
@@ -49,9 +49,26 @@ const addNewSocial = async (req, res) => {
  * @description This method is responsible for fetching all the socials in user's portfolio
  */
 const getAllSocials = async (req, res) => {
+  //   try {
+  //     const socials = await socialAccountModel.findAll();
+  //     res.status(200).send({ socials });
+  //   } catch (error) {
+  //     res.status(500).json({ error: error.message });
+  //   }
   try {
-    const socials = await socialAccountModel.findAll();
-    res.status(200).send({ socials });
+    const user = await userModel.findOne({
+      where: {
+        user_id: req.body.user_id,
+      },
+      include: [socialAccountModel],
+    });
+    if (!user)
+      res.status(404).send({
+        message: "User not found",
+      });
+    else {
+      res.status(200).send({ socials: user.SocialAccounts });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -98,7 +115,11 @@ const updateSocial = async (req, res) => {
         message: "Social account not found",
       });
     else {
-      const updatedSocialAccount = await socialAccount.update(req.body);
+      const updatedSocialAccount = await socialAccount.update(req.body, {
+        where: {
+          user_id: req.body.user_id,
+        },
+      });
       await socialAccount.save();
       res.status(200).send({
         message: "Social account successfully updated!",

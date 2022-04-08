@@ -44,12 +44,29 @@ const addNewTestimonial = async (req, res) => {
  *
  * @param {*} req
  * @param {*} res
- * @description This method is responsible for fetching all the projects in user's portfolio
+ * @description This method is responsible for fetching all the testimonials in user's portfolio
  */
-const getAllProjects = async (req, res) => {
+const getAllTestimonials = async (req, res) => {
+  //   try {
+  //     const projects = await projectModel.findAll();
+  //     res.status(200).send({ projects });
+  //   } catch (error) {
+  //     res.status(500).json({ error: error.message });
+  //   }
   try {
-    const projects = await projectModel.findAll();
-    res.status(200).send({ projects });
+    const user = await userModel.findOne({
+      where: {
+        user_id: req.body.user_id,
+      },
+      include: [testimonialModel],
+    });
+    if (!user)
+      res.status(404).send({
+        message: "User not found",
+      });
+    else {
+      res.status(200).send({ user_testimonials: user.Testimonials });
+    }
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -59,19 +76,19 @@ const getAllProjects = async (req, res) => {
  * @param {*} req
  * @param {*} res
  */
-const getProjectById = async (req, res) => {
+const getTestimonialById = async (req, res) => {
   try {
-    const project = await projectModel.findOne({
+    const testimonial = await testimonialModel.findOne({
       where: {
-        project_id: req.params.project_id,
+        test_id: req.params.test_id,
       },
     });
-    if (!project)
+    if (!testimonial)
       res.status(404).send({
-        message: "Project not found!",
+        message: "Testimonial not found!",
       });
     else {
-      res.status(200).send(project);
+      res.status(200).send({ testimonial });
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -82,25 +99,27 @@ const getProjectById = async (req, res) => {
  *
  * @param req
  * @param res
- * @description This method is responsible for updating project details
+ * @description This method is responsible for updating testimonial details
  */
-const updateProject = async (req, res) => {
+const updateTestimonial = async (req, res) => {
   try {
-    const project = await projectModel.findOne({
+    const testimonial = await testimonialModel.findOne({
       where: {
-        project_id: req.params.project_id,
+        test_id: req.params.test_id,
       },
     });
-    if (!project)
+    if (!testimonial)
       res.status(404).send({
-        message: "Project not found",
+        message: "Testimonial not found",
       });
     else {
-      const updatedProject = await project.update(req.body);
-      await project.save();
+      const updatedTestimonial = await testimonial.update(req.body, {
+        where: { test_id: req.params.test_id },
+      });
+      await testimonial.save();
       res.status(200).send({
-        message: "Project successfully updated!",
-        project: updatedProject,
+        message: "Testimonial successfully updated!",
+        updated_testimonial: updatedTestimonial,
       });
     }
   } catch (error) {
@@ -118,27 +137,27 @@ const updateProject = async (req, res) => {
  *
  * @param req
  * @param res
- * @description This method is responsible for removing project from user's portfolio
+ * @description This method is responsible for removing testimonial from user's portfolio
  */
-const deleteProject = async (req, res) => {
+const deleteTestimonial = async (req, res) => {
   try {
-    const project = await projectModel.findOne({
+    const testimonial = await testimonialModel.findOne({
       where: {
-        project_id: req.params.project_id,
+        test_id: req.params.test_id,
       },
     });
-    if (!project)
+    if (!testimonial)
       res.status(404).send({
-        message: "Project not found",
+        message: "Testimonial not found",
       });
     else {
-      await user.destroy({
+      await testimonial.destroy({
         where: {
-          project_id: req.params.project_id,
+          test_id: req.params.test_id,
         },
       });
       res.status(200).send({
-        message: "Project successfully deleted!",
+        message: "Testimonial successfully deleted!",
       });
     }
   } catch (error) {
@@ -148,8 +167,8 @@ const deleteProject = async (req, res) => {
 
 module.exports = {
   addNewTestimonial,
-//   getAllProjects,
-//   getProjectById,
-//   updateProject,
-//   deleteProject,
+  getAllTestimonials,
+  getTestimonialById,
+  updateTestimonial,
+  deleteTestimonial,
 };

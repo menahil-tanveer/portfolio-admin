@@ -8,9 +8,8 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Testimonial.belongsToMany(models.User, {
-        through: "UserTestimonials",
-        foreignKey: "test_id",
+      Testimonial.belongsTo(models.User, {
+        foreignKey: "user_id",
       });
     }
   }
@@ -19,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       test_id: DataTypes.INTEGER,
       testimonial: {
         type: DataTypes.STRING,
-        len: [2, 150],
+        len: [2, 250],
         is: /^[a-zA-Z0-9!%&()-;:"',?. ]+$/i,
         notEmpty: true,
       },
