@@ -1,29 +1,36 @@
+/**
+ *
+ * Author: Menahil
+ * Created: 08-04-2022
+ * Purpose: This file contains validation logic for education routes (create/update)
+ *
+ */
 const Joi = require("joi");
 /**
  * @param req
  * @param res
  * @param next
- * @description This method is responsible for validating user's signup information
+ * @description This method is responsible for validating user input at the time education resource creation
  */
-function validateProject(req, res, next) {
-  let { user_id, project_name, git_url, project_url } = req.body;
+function validateEducation(req, res, next) {
+  let { user_id, degree, institution } = req.body;
   let payload = {
     user_id: user_id ? user_id.toLowerCase().trim() : null,
-    // project_id: project_id ? project_id.toLowerCase().trim() : null,
-    project_name: project_name ? project_name.toLowerCase().trim() : null,
-    git_url: git_url ? git_url.trim() : null,
-    project_url: project_url ? project_url.trim() : null,
+    degree: degree ? degree.toLowerCase().trim() : null,
+    institution: institution ? institution.trim() : null,
   };
   try {
     const schema = Joi.object().keys({
       user_id: Joi.string().required(),
-      project_name: Joi.string()
+      degree: Joi.string()
         .regex(/^[A-Za-z ]+$/)
-        .min(1)
+        .min(2)
         .max(100)
         .required(),
-      git_url: Joi.string(),
-      project_url: Joi.string(),
+      institution: Joi.string()
+        .regex(/^[A-Za-z ]+$/)
+        .min(2)
+        .max(100),
     });
     const result = schema.validate(payload);
     if (result.error) {
@@ -44,17 +51,17 @@ function validateProject(req, res, next) {
  * @param next
  * @description This method is responsible for validating updated data
  */
-function validateProjectUpdate(req, res, next) {
+function validateEducationUpdate(req, res, next) {
   try {
     const schema = Joi.object().keys({
-      user_id: Joi.string().required(),
-      //   project_id: Joi.string().regex(/^[0-9]+$/),
-      project_name: Joi.string()
+      degree: Joi.string()
         .regex(/^[A-Za-z ]+$/)
-        .min(1)
+        .min(2)
         .max(100),
-      git_url: Joi.string().min(4),
-      project_url: Joi.string().min(4),
+      institution: Joi.string()
+        .regex(/^[A-Za-z ]+$/)
+        .min(2)
+        .max(100),
     });
     const result = schema.validate(req.body);
     if (result.error) {
@@ -70,6 +77,6 @@ function validateProjectUpdate(req, res, next) {
   }
 }
 module.exports = {
-  validateProject,
-  validateProjectUpdate,
+  validateEducation,
+  validateEducationUpdate,
 };

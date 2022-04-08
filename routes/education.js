@@ -8,14 +8,22 @@
 const express = require("express");
 const router = express.Router();
 const educationController = require("../controllers/education");
-
-router.post("/add-education", educationController.addEducation);
+const {
+  validateEducation,
+  validateEducationUpdate,
+} = require("../middlewares/education");
+router.post(
+  "/add-education",
+  [validateEducation],
+  educationController.addEducation
+);
 router.post(
   "/get-educational-background",
   educationController.getEducationalBackground
 );
 router.patch(
   "/update-educational-background/:id",
+  [validateEducationUpdate],
   educationController.updateEducationalBackground
 );
 router.delete("/delete-education/:id", educationController.deleteEducation);
