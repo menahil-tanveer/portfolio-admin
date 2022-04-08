@@ -32,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       project_url: DataTypes.STRING,
       git_url: DataTypes.STRING,
+      user_id: DataTypes.STRING,
     },
     {
       sequelize,
