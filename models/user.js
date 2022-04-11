@@ -85,6 +85,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BLOB,
         notEmpty: false,
       },
+      token: DataTypes.STRING,
     },
     {
       sequelize,
