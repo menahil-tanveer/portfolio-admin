@@ -16,7 +16,7 @@ const login = async (req, res) => {
       where: { user_id: req.body.user_id },
     });
     if (admin && bcrypt.compareSync(req.body.password, admin.password)) {
-      // find admin and verify password
+      // find user and verify password
       const token = jwt.sign(
         // authentication successful
         { id: admin.user_id, user_id: req.body.user_id },
@@ -25,7 +25,7 @@ const login = async (req, res) => {
           expiresIn: "2h",
         }
       );
-      // save admin token
+      // save user token
       admin.update({
         token,
       });
